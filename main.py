@@ -4,7 +4,6 @@ import requests
 import vosk
 import cv2
 
-
 model = vosk.Model('vosk-model-small-ru-0.22')
 response = requests.get('https://dog.ceo/api/breeds/image/random')
 data = json.loads(response.content)
@@ -69,6 +68,19 @@ def get_image_resolution():
     width, height, _ = img.shape
     resolution = str(width) + " x " + str(height)
     print(resolution)
+
+
+# Описание породы собаки
+def get_breed_description():
+    response = requests.get("https://en.wikipedia.org/wiki/List_of_dog_breeds")
+    breed_text = response.text
+    # Разбиваем текст на строки и ищем названия пород
+    breeds = []
+    for line in breed_text.split("\n"):
+        if "<a href=\"/wiki/" in line:
+            breed_name = line.split("/wiki/")[1].split("\"")[0]
+            breeds.append(breed_name.replace("_", " "))
+    print(breeds)
 
 
 for text in listen():
